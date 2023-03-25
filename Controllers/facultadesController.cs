@@ -20,8 +20,14 @@ namespace DAWpractica1.Controllers
         [Route("GetTodo")]
         public IActionResult Get()
         {
-            List<facultades> listadofacultades = (from e in _equipos_context.facultades
-                                                     select e).ToList();
+            var listadofacultades = (from e in _equipos_context.facultades
+                                     join c in _equipos_context.carreras on e.facultad_id equals c.facultad_id
+                                                     select new
+                                                     {
+                                                         e.nombre_facultad,
+                                                         e.facultad_id,
+                                                         c.nombre_carrera
+                                                     }).ToList();
             if (listadofacultades.Count() == 0)
             {
                 return NotFound();

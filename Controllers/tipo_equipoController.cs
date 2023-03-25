@@ -20,8 +20,16 @@ namespace DAWpractica1.Controllers
         [Route("GetTodo")]
         public IActionResult Get()
         {
-            List<tipo_equipo> listadot_e = (from e in _equipos_context.tipo_equipo
-                                              select e).ToList();
+            var listadot_e = (from e in _equipos_context.tipo_equipo
+                              join eq in _equipos_context.equipos on e.id_tipo_equipo equals eq.tipo_equipo_id
+                                              select new
+                                              {
+                                                  e.id_tipo_equipo,
+                                                  e.descripcion,
+                                                  eq.vida_util,
+                                                  eq.nombre,
+                                                  eq.costo
+                                              }).ToList();
             if (listadot_e.Count() == 0)
             {
                 return NotFound();
@@ -33,7 +41,7 @@ namespace DAWpractica1.Controllers
         public IActionResult Get(int id)
         {
             tipo_equipo? te1 = (from e in _equipos_context.tipo_equipo
-                            where e.id_te== id
+                            where e.id_tipo_equipo == id
                             select e).FirstOrDefault();
             if (te1 == null)
             {
@@ -60,13 +68,13 @@ namespace DAWpractica1.Controllers
         public IActionResult Actualizar(int id, [FromBody] tipo_equipo teModificadoe)
         {
             tipo_equipo? te = (from e in _equipos_context.tipo_equipo
-                            where e.id_te == id
+                            where e.id_tipo_equipo == id
                             select e).FirstOrDefault();
             if (te == null)
             {
                 return NotFound();
             }
-            te.id_te = teModificadoe.id_te;
+            te.id_tipo_equipo = teModificadoe.id_tipo_equipo;
             te.descripcion = teModificadoe.descripcion;
             te.estado = teModificadoe.estado;
             _equipos_context.Entry(te).State = EntityState.Modified;
@@ -79,7 +87,7 @@ namespace DAWpractica1.Controllers
         public IActionResult EliminarEquipo(int id)
         {
             tipo_equipo? te = (from e in _equipos_context.tipo_equipo
-                            where e.id_te == id
+                            where e.id_tipo_equipo == id
                             select e).FirstOrDefault();
             if (te == null)
             {

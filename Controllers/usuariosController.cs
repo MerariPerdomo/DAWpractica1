@@ -20,8 +20,16 @@ namespace DAWpractica1.Controllers
         [Route("GetTodo")]
         public IActionResult Get()
         {
-            List<usuarios> listadoUsers = (from e in _equipos_context.usuarios
-                                            select e).ToList();
+            var listadoUsers = (from e in _equipos_context.usuarios 
+                                join m in _equipos_context.reservas on e.usuario_id equals m.usuario_id
+                                            select new
+                                            {
+                                                e.usuario_id,
+                                                e.nombre,
+                                                e.tipo,
+                                                Descripción = ("Id de la reserva: " + m.reserva_id + " Estado de la reserva: " + 
+                                                m.estado_reserva_id)
+                                            }).ToList();
             if (listadoUsers.Count() == 0)
             {
                 return NotFound();
