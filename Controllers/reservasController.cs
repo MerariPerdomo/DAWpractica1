@@ -85,14 +85,14 @@ namespace DAWpractica1.Controllers
         [Route("eliminar/{id}")]
         public IActionResult EliminarEquipo(int id)
         {
-            reservas? r1 = (from e in _equipos_context.marcas
-                               where e.id_marcas == id
+            reservas? r1 = (from e in _equipos_context.reservas
+                               where e.reserva_id == id
                                select e).FirstOrDefault();
             if (r1 == null)
             {
                 return NotFound();
             }
-            _equipos_context.marcas.Attach(r1);
+            _equipos_context.reservas.Attach(r1);
             _equipos_context.Remove(r1);
             _equipos_context.SaveChanges();
             return Ok(r1);

@@ -11,7 +11,7 @@ namespace DAWpractica1.Controllers
     {
         private readonly equipos_context _equipos_context;
 
-        public tipo_equipoController(equipos_context equipos_context)
+        public usuariosController(equipos_context equipos_context)
         {
             _equipos_context = equipos_context;
         }
@@ -88,7 +88,7 @@ namespace DAWpractica1.Controllers
             {
                 return NotFound();
             }
-            _equipos_context.tipo_equipo.Attach(us);
+            _equipos_context.usuarios.Attach(us);
             _equipos_context.Remove(us);
             _equipos_context.SaveChanges();
             return Ok(us);
